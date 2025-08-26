@@ -357,7 +357,15 @@ footer{
 
 <script>
 /* ===== API ===== */
-const api = { health:'/api/health', plants:'/api/plants', categories:'/api/categories', sample:'/api/plants/sample' };
+const API_BASE = "https://tryhost-hnya.onrender.com"; 
+
+const api = { 
+  health: API_BASE + '/api/health', 
+  plants: API_BASE + '/api/plants', 
+  categories: API_BASE + '/api/categories', 
+  sample: API_BASE + '/api/plants/sample' 
+};
+
 const el = sel => document.querySelector(sel);
 const els = sel => Array.from(document.querySelectorAll(sel));
 const toastEl = el('#toast');
