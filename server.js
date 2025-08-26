@@ -1,10 +1,7 @@
-// server.js
 /**
  * Urvann Mini Plant Store — Backend (APIs only)
- * Node.js + Express + MongoDB (Mongoose)
  *
  * This file preserves all of your original backend logic and the seed data.
- * It also optionally serves a built React frontend from client/build if present.
  */
 
 const fs = require('fs');
@@ -35,28 +32,32 @@ const PlantSchema = new mongoose.Schema({
 });
 
 async function initMongo() {
-  const uri = process.env.MONGODB_URI;
+  const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
+  console.log("All ENV keys I see:", Object.keys(process.env));
+  console.log("MONGODB_URI value is:", process.env.MONGODB_URI);
   if (!uri) {
     console.warn('[DB] MONGODB_URI not found in .env — using in-memory fallback');
     useMongo = false;
     return false;
   }
   try {
+    console.log("[DB] Trying to connect to:", uri);
     await mongoose.connect(uri, {
-      dbName: process.env.MONGODB_DB || undefined,
       useNewUrlParser: true,
       useUnifiedTopology: true
     });
     PlantModel = mongoose.model('Plant', PlantSchema);
-    console.log('[DB] Connected to MongoDB');
+    console.log('[DB] ✅ Connected to MongoDB');
     useMongo = true;
     return true;
   } catch (err) {
-    console.error('[DB] MongoDB connection failed:', err.message);
+    console.error('[DB] ❌ MongoDB connection failed:', err);
     useMongo = false;
     return false;
   }
 }
+
+
 
 // -------------------- Auto-seed MongoDB --------------------
 async function autoSeedPlants() {
@@ -161,7 +162,7 @@ function escapeRegex(str) {
   return String(str).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
-// Smarter search: single-char => startsWith; multi-char => contains (also checks categories)
+
 function matchesSearch(p, term){
   const q = String(term || '').trim().toLowerCase();
   if(!q) return true;
@@ -180,13 +181,12 @@ function matchesCategory(p, cat){
   return (p.categories||[]).some(c=>String(c).toLowerCase()===q);
 }
 
-// serve static public files from /public if present
 const publicPath = path.join(__dirname, 'public');
 if (fs.existsSync(publicPath)) {
   app.use(express.static(publicPath));
 }
 
-// serve favicon only if present (avoid crash)
+
 try {
   const favicon = require('serve-favicon');
   const ico = path.join(__dirname, 'public', 'storelogo.ico');
