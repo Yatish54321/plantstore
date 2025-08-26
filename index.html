@@ -7,30 +7,29 @@
 <link rel="icon" href="/storelogo.ico" type="image/x-icon">
 <link rel="icon" href="/storelogo.png" type="image/png">
 
-
 <style>
 :root{
-  /* Brand palette — Light, Plant-inspired */
-  --bg:#F6FAF6;              /* garden mist */
-  --bg-2:#ECF6EE;            /* soft leaf tint */
-  --panel:#FFFFFF;           /* surfaces */
+  /* Light, Plant-inspired */
+  --bg:#F6FAF6;
+  --bg-2:#ECF6EE;
+  --panel:#FFFFFF;
   --card:#FFFFFF;
-  --text:#1B2B22;            /* deep leaf text */
-  --muted:#62756C;           /* sage gray */
-  --accent:#2F9D69;          /* leaf green */
-  --accent2:#31B5A3;         /* water teal */
-  --soil:#8B5E3C;            /* soil brown */
-  --water:#3FA7D6;           /* water blue */
+  --text:#1B2B22;
+  --muted:#62756C;
+  --accent:#2F9D69;
+  --accent2:#31B5A3;
+  --soil:#8B5E3C;
   --danger:#E05252;
-  --warn:#E6A534;
   --border:rgba(27,43,34,0.10);
   --shadow:rgba(15, 38, 24, .08);
   --ring:rgba(47,157,105,.28);
-  --header-h: 56px;          /* slightly taller for airy light theme */
+  --header-h: 56px;
+  --radius:18px;
 }
 
 /* Reset & base */
 *{box-sizing:border-box}
+html,body{height:100%}
 body{
   margin:0;
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
@@ -40,8 +39,7 @@ body{
     radial-gradient(900px 500px at 110% -10%, #E6F4F7 0%, transparent 50%),
     linear-gradient(180deg, var(--bg) 0%, #FDFEFC 100%);
   min-height:100vh;
-  display:flex;
-  flex-direction:column;
+  display:flex; flex-direction:column;
   -webkit-font-smoothing:antialiased;
   -moz-osx-font-smoothing:grayscale;
 }
@@ -54,13 +52,13 @@ body{
   width:44px;height:44px;border-radius:12px;
   background:
     conic-gradient(from 210deg, #B9E6C8, #8ED7B1, #B9E6C8),
-    radial-gradient(40px 40px at 50% 110%, #E2D3C6 0%, transparent 60%); /* subtle soil at base */
+    radial-gradient(40px 40px at 50% 110%, #E2D3C6 0%, transparent 60%);
   box-shadow: 0 6px 18px var(--shadow), 0 0 0 1px var(--border) inset;
-  display:grid; place-items:center; font-weight:800; color:#0d3b2a;
+  display:grid; place-items:center; font-weight:800; color:#0d3b2a; font-size:1.2rem;
 }
 .brand-text{display:flex;flex-direction:column}
-.brand-title{font-size:18px;font-weight:800;letter-spacing:.2px}
-.brand-sub{font-size:12px;color:var(--muted)}
+.brand-title{font-size:clamp(1rem, 2.2vw, 1.15rem);font-weight:800;letter-spacing:.2px}
+.brand-sub{font-size:clamp(.72rem, 1.8vw, .85rem);color:var(--muted)}
 
 /* State pill */
 .pill{
@@ -68,20 +66,19 @@ body{
   background:rgba(47,157,105,.08);
   border:1px solid rgba(47,157,105,.20);
   padding:6px 10px;border-radius:999px;
-  font-size:12px;color:#1b3a2b;
+  font-size:.78rem;color:#1b3a2b;
 }
 
-/* ===== Header (compact & glassy) ===== */
+/* ===== Header ===== */
 header {
   top: 0;
   z-index: 30;
-  height: var(--header-h, 56px);
+  height: var(--header-h);
   backdrop-filter: blur(10px);
-  background: rgba(255,255,255,.8);
+  background: rgba(255,255,255,.82);
   border-bottom:1px solid var(--border);
-  position: relative; /* natural flow; toolbar handles stickiness */
+  position: relative;
 }
-
 .header-container.container {
   display: flex;
   align-items: center;
@@ -93,22 +90,27 @@ header {
   margin: 0 auto;
 }
 
-/* ===== Toolbar (hugs header, no gap) ===== */
+/* ===== Toolbar wrapper + spacer (prevents layout jump/overlap) ===== */
+.toolbar-wrap{position:relative}
+#toolbarSpacer{height:0px; transition:height .2s ease}
+
+/* ===== Toolbar ===== */
 .toolbar {
   display: grid;
   grid-template-columns: 1fr 160px 160px 160px;
   gap: 10px;
   padding: 12px 16px;
-  margin-top: 0;
   position: sticky;
-  top: var(--header-h, 56px);
+  top: var(--header-h);
+  margin-top: 0;
 
   backdrop-filter: blur(8px);
-  background: rgba(255,255,255,0.86);
+  background: rgba(255,255,255,0.9);
   border: 1px solid var(--border);
-  border-radius: 0 0 14px 14px;
+  border-top: none;
+  border-radius: 0 0 var(--radius) var(--radius);
   box-shadow: 0 8px 24px var(--shadow);
-  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease, width .2s ease, border-radius .2s ease;
   z-index: 25;
 }
 .toolbar:hover{ border-color: rgba(47,157,105,.22) }
@@ -120,8 +122,7 @@ header {
   left: 50%;
   transform: translateX(-50%);
   width: min(95%, 1200px);
-  margin-top: 0;
-  border-radius: 0 0 14px 14px;
+  border-radius: 0 0 var(--radius) var(--radius);
   z-index: 29;
 }
 
@@ -130,6 +131,7 @@ header {
   padding:10px 12px;border-radius:10px;border:1px solid var(--border);
   background: var(--panel); color:var(--text); outline:none;
   transition: box-shadow .2s, transform .06s, border-color .2s, background .2s;
+  min-width:0; /* prevents overflow in grid */
 }
 .input::placeholder{ color: #8aa398 }
 .input:focus, .select:focus{box-shadow:0 0 0 4px var(--ring); border-color:rgba(47,157,105,.45)}
@@ -139,6 +141,7 @@ header {
   background: linear-gradient(135deg,var(--accent),var(--accent2));
   color:#fff; border:none; font-weight:750; cursor:pointer;
   box-shadow: 0 6px 16px rgba(47,157,105,.2);
+  white-space:nowrap;
 }
 .btn:hover{ filter: brightness(1.04) }
 .btn:active{ transform: translateY(1px) }
@@ -153,14 +156,13 @@ main{flex:1}
 .card{
   background: var(--card);
   border:1px solid var(--border);
-  border-radius:18px; padding:14px;
+  border-radius:var(--radius); padding:14px;
   box-shadow: 0 10px 26px var(--shadow);
   display:flex; flex-direction:column; gap:10px;
   transition: transform .18s ease, box-shadow .18s ease, border-color .2s;
   position:relative; overflow:hidden; isolation:isolate;
 }
 .card:before{
-  /* faint leaf shape */
   content:"";
   position:absolute; inset:auto -30% -40% auto; width:180px; height:180px;
   background: radial-gradient(80px 140px at 50% 50%, rgba(47,157,105,.08) 0%, transparent 70%);
@@ -173,24 +175,25 @@ main{flex:1}
   background:
     linear-gradient(180deg, #E7F5EB 0%, #DDEFE9 100%),
     linear-gradient(180deg, #EAF6FB 0%, #E4F3FA 100%);
-  display:grid; place-items:center; color:#5f7b6c; font-size:12px; font-weight:700; letter-spacing:.4px;
+  display:grid; place-items:center; color:#5f7b6c; font-size:.85rem; font-weight:700; letter-spacing:.4px;
   border:1px dashed rgba(27,43,34,.12);
 }
-.card h3{margin:0;font-size:16px;font-weight:800}
+.card h3{margin:0;font-size:clamp(.95rem, 2.2vw, 1.05rem);font-weight:800}
 .price{font-weight:850; letter-spacing:.2px; color:var(--soil)}
 .badges{display:flex; flex-wrap:wrap; gap:6px}
 .tag{
   display:inline-flex; align-items:center; gap:6px;
-  padding:4px 8px; border-radius:999px; font-size:12px; font-weight:600;
+  padding:4px 8px; border-radius:999px; font-size:.75rem; font-weight:600;
   background:rgba(47,157,105,.08); border:1px solid rgba(47,157,105,.20); color:#1f4a35;
 }
-.stock{font-size:12px}
+.stock{font-size:.78rem}
 .stock.in{color:#1f7a4f}
 .stock.out{color:var(--danger)}
 .card-footer{display:flex; align-items:center; justify-content:space-between; margin-top:auto; gap:8px}
 .btn-sm{
-  padding:7px 10px; border-radius:8px; border:1px solid var(--border); font-size:12px; cursor:pointer; background:#fff;
+  padding:7px 10px; border-radius:8px; border:1px solid var(--border); font-size:.78rem; cursor:pointer; background:#fff;
   transition: transform .12s, filter .2s, border-color .2s;
+  white-space:nowrap;
 }
 .btn-sm:hover{transform:translateY(-1px); border-color: rgba(47,157,105,.35)}
 .edit{ background: linear-gradient(135deg,#4fc08a,#35a8b6); color:#fff; border:none }
@@ -215,20 +218,21 @@ main{flex:1}
 footer{
   position:fixed; bottom:0; left:0; width:100%;
   backdrop-filter: blur(8px);
-  background: rgba(255,255,255,.86);
+  background: rgba(255,255,255,.92);
   border-top:1px solid var(--border);
   z-index:20;
 }
 .footer-container{
   display:flex; align-items:center; justify-content:space-between;
   padding:10px 16px; width:min(1200px,95%); margin:0 auto;
+  font-size:.9rem;
 }
 .footer-brand{font-weight:900;color:var(--accent)}
 .footer-count{
-  background:rgba(47,157,105,.08); padding:6px 12px; border-radius:999px; font-size:13px;
+  background:rgba(47,157,105,.08); padding:6px 12px; border-radius:999px; font-size:.85rem;
   border:1px solid rgba(47,157,105,.20); color:#1f4a35;
 }
-.container{padding-bottom:86px} /* avoid overlap with footer */
+.container{padding-bottom:calc(90px + env(safe-area-inset-bottom, 0px))} /* avoid overlap with footer */
 
 /* ===== Modal ===== */
 .modal-backdrop{
@@ -240,11 +244,11 @@ footer{
   border:1px solid var(--border); border-radius:16px; padding:16px;
   box-shadow: 0 20px 40px rgba(27,43,34,.18);
 }
-.modal h2{margin:0 0 8px 0}
+.modal h2{margin:0 0 8px 0;font-size:clamp(1rem, 2.6vw, 1.2rem)}
 .modal .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-.modal label{font-size:12px; color:var(--muted)}
+.modal label{font-size:.8rem; color:var(--muted)}
 .modal .row-2{grid-column:1 / -1}
-.error{color:var(--danger); font-size:12px; margin-top:6px; display:none}
+.error{color:var(--danger); font-size:.78rem; margin-top:6px; display:none}
 
 /* ===== Toasts ===== */
 .toast{
@@ -252,7 +256,7 @@ footer{
   background:#163a2a; border:1px solid rgba(255,255,255,.12);
   color:#F4FFF7; padding:10px 12px; border-radius:10px;
   box-shadow: 0 8px 24px rgba(27,43,34,.28);
-  display:none; z-index:45; font-size:13px;
+  display:none; z-index:45; font-size:.85rem;
 }
 
 /* ===== Empty state ===== */
@@ -262,12 +266,22 @@ footer{
 }
 
 /* ===== Responsive ===== */
-@media (max-width: 920px){
-  .toolbar{grid-template-columns:1fr 1fr 1fr; }
+@media (max-width: 1024px){
+  .toolbar{grid-template-columns:1fr 1fr 1fr}
   #sortWrap{display:none}
 }
-@media (max-width: 720px){
+@media (max-width: 740px){
   .toolbar{grid-template-columns:1fr 1fr}
+}
+@media (max-width: 560px){
+  .toolbar{grid-template-columns:1fr}
+  .brand-sub{display:none}
+  .grid{grid-template-columns:1fr}
+  .card{padding:12px}
+  .card .img{font-size:.8rem}
+  .btn-sm{padding:6px 9px}
+  .modal{width:100%;border-radius:14px}
+  .modal .grid{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -286,26 +300,31 @@ footer{
 </header>
 
 <main class="container">
-  <div class="toolbar" role="region" aria-label="Filters and actions">
-    <input id="search" class="input" placeholder="Search plants or categories…" aria-label="Search"/>
-    <select id="category" class="select" aria-label="Category">
-      <option value="">All categories</option>
-    </select>
-    <select id="availability" class="select" aria-label="Stock">
-      <option value="">All stock states</option>
-      <option value="true">In stock</option>
-      <option value="false">Out of stock</option>
-    </select>
-    <div id="sortWrap" style="display:contents">
-      <select id="sort" class="select" aria-label="Sort">
-        <option value="">Sort: Default</option>
-        <option value="priceAsc">Price ↑</option>
-        <option value="priceDesc">Price ↓</option>
-        <option value="nameAsc">Name A–Z</option>
-        <option value="nameDesc">Name Z–A</option>
+  <!-- Spacer avoids layout jump when toolbar becomes fixed -->
+  <div id="toolbarSpacer"></div>
+
+  <div class="toolbar-wrap">
+    <div class="toolbar" role="region" aria-label="Filters and actions" id="toolbar">
+      <input id="search" class="input" placeholder="Search plants or categories…" aria-label="Search"/>
+      <select id="category" class="select" aria-label="Category">
+        <option value="">All categories</option>
       </select>
+      <select id="availability" class="select" aria-label="Stock">
+        <option value="">All stock states</option>
+        <option value="true">In stock</option>
+        <option value="false">Out of stock</option>
+      </select>
+      <div id="sortWrap" style="display:contents">
+        <select id="sort" class="select" aria-label="Sort">
+          <option value="">Sort: Default</option>
+          <option value="priceAsc">Price ↑</option>
+          <option value="priceDesc">Price ↓</option>
+          <option value="nameAsc">Name A–Z</option>
+          <option value="nameDesc">Name Z–A</option>
+        </select>
+      </div>
+      <button id="addBtn" class="btn" aria-haspopup="dialog">➕ Add Plant</button>
     </div>
-    <button id="addBtn" class="btn" aria-haspopup="dialog">➕ Add Plant</button>
   </div>
 
   <div id="status" class="brand-sub"></div>
@@ -357,26 +376,34 @@ footer{
 
 <script>
 /* ===== API ===== */
-const API_BASE = "https://tryhost-hnya.onrender.com"; 
-
-const api = { 
-  health: API_BASE + '/api/health', 
-  plants: API_BASE + '/api/plants', 
-  categories: API_BASE + '/api/categories', 
-  sample: API_BASE + '/api/plants/sample' 
+const API_BASE = "https://tryhost-hnya.onrender.com";
+const api = {
+  health: API_BASE + '/api/health',
+  plants: API_BASE + '/api/plants',
+  categories: API_BASE + '/api/categories',
+  sample: API_BASE + '/api/plants/sample'
 };
 
+/* ===== Helpers ===== */
 const el = sel => document.querySelector(sel);
 const els = sel => Array.from(document.querySelectorAll(sel));
 const toastEl = el('#toast');
 
-/* ===== Toast helper ===== */
 function toast(msg){
   toastEl.textContent = msg;
   toastEl.style.display = 'block';
   clearTimeout(toastEl._t);
   toastEl._t = setTimeout(()=> toastEl.style.display = 'none', 2200);
 }
+
+async function fetchJSON(url,opt){
+  const res = await fetch(url,opt);
+  if(!res.ok) throw new Error('HTTP '+res.status);
+  return res.json();
+}
+
+const debounce = (fn, t=220)=>{ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn(...a), t); } };
+const throttle = (fn, t=100)=>{ let last=0; return (...a)=>{ const now=Date.now(); if(now-last>t){ last=now; fn(...a); } } };
 
 /* ===== Modal logic ===== */
 let editId = null;
@@ -412,9 +439,6 @@ function closeModal(){
 }
 m_cancel.addEventListener('click', closeModal);
 modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) closeModal(); });
-
-/* ===== Fetch helper ===== */
-async function fetchJSON(url,opt){ const res = await fetch(url,opt); if(!res.ok){ throw new Error('HTTP '+res.status) } return res.json(); }
 
 /* ===== State ===== */
 let plants = [];
@@ -457,7 +481,6 @@ function queryParams(){
   const stock = el('#availability').value;
   return { search, cat, stock };
 }
-const debounce = (fn, t=220)=>{ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn(...a), t); } };
 
 async function loadPlants(){
   try{
@@ -479,7 +502,8 @@ async function loadPlants(){
 }
 
 function applyClientSort(){
-  const sortVal = el('#sort') ? el('#sort').value : '';
+  const sortEl = el('#sort');
+  const sortVal = sortEl ? sortEl.value : '';
   if(sortVal === 'priceAsc') plants.sort((a,b)=>(a.price||0)-(b.price||0));
   else if(sortVal === 'priceDesc') plants.sort((a,b)=>(b.price||0)-(a.price||0));
   else if(sortVal === 'nameAsc') plants.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
@@ -529,29 +553,27 @@ el('#addBtn').addEventListener('click', ()=> openModal());
 el('#category').addEventListener('change', loadPlants);
 el('#availability').addEventListener('change', loadPlants);
 if(el('#sort')) el('#sort').addEventListener('change', ()=>{ applyClientSort(); renderPlants(); });
-
-/* Debounced search */
 el('#search').addEventListener('input', debounce(loadPlants, 250));
 
 /* Submit (Add / Update) */
 m_submit.addEventListener('click', async ()=>{
   const name = m_name.value.trim();
-  const price = m_price.value.trim();
-  const cats = m_cats.value.trim();
+  const priceStr = m_price.value.trim();
+  const catsStr = m_cats.value.trim();
   const stock = m_stock.checked;
 
   let valid = true;
   e_name.style.display = e_price.style.display = e_cats.style.display = 'none';
 
   if(!name || name.length < 2){ e_name.textContent='Name must be at least 2 characters'; e_name.style.display='block'; valid=false; }
-  if(!price || isNaN(price) || Number(price) < 0){ e_price.textContent='Enter a valid price'; e_price.style.display='block'; valid=false; }
-  if(!cats){ e_cats.textContent='At least 1 category'; e_cats.style.display='block'; valid=false; }
+  if(priceStr === '' || isNaN(priceStr) || Number(priceStr) < 0){ e_price.textContent='Enter a valid price'; e_price.style.display='block'; valid=false; }
+  if(!catsStr || !catsStr.split(',').map(s=>s.trim()).filter(Boolean).length){ e_cats.textContent='At least 1 category'; e_cats.style.display='block'; valid=false; }
   if(!valid) return;
 
   const payload = {
     name,
-    price: Number(price),
-    categories: cats.split(',').map(s=>s.trim()).filter(Boolean),
+    price: Number(priceStr),
+    categories: catsStr.split(',').map(s=>s.trim()).filter(Boolean),
     inStock: stock
   };
 
@@ -570,41 +592,62 @@ m_submit.addEventListener('click', async ()=>{
     }
     closeModal();
     loadPlants();
-    loadSample(); // keep your original hook
+    loadSample(); // no-op if not supported
   }catch(e){ console.error(e); toast('Save failed'); }
 });
 
 /* ===== Sample seeding (safe no-op if not present) ===== */
 async function loadSample(){
-  try{
-    // Try to trigger seeding if backend supports it; ignore errors.
-    await fetch(api.sample, { method:'POST' }).catch(()=>{});
-  }catch(e){ /* ignore */ }
+  try{ await fetch(api.sample, { method:'POST' }).catch(()=>{}); }catch(e){}
 }
 
-/* ===== Init ===== */
+/* ===== Health ===== */
 (async ()=>{
   try{
     const health = await fetchJSON(api.health);
     el('#mongoState').textContent = health.mongo ? 'Connected' : 'Not Connected (Memory)';
   }catch(e){ el('#mongoState').textContent = 'Unknown'; }
+})();
 
+/* ===== Smart toolbar (hug header, no overlap, no layout jump) ===== */
+const toolbar = el('#toolbar');
+const toolbarSpacer = el('#toolbarSpacer');
+const header = document.querySelector('header');
+
+function updateToolbarSticky(){
+  if(!toolbar || !header) return;
+  const shouldStick = window.scrollY > header.offsetHeight;
+  const tbHeight = toolbar.offsetHeight;
+
+  if(shouldStick){
+    if(!toolbar.classList.contains('sticky')){
+      toolbar.classList.add('sticky');
+      toolbarSpacer.style.height = tbHeight + 'px'; // reserve space to prevent jump/overlap
+    }
+  }else{
+    if(toolbar.classList.contains('sticky')){
+      toolbar.classList.remove('sticky');
+    }
+    toolbarSpacer.style.height = '0px';
+  }
+}
+
+document.addEventListener("scroll", throttle(updateToolbarSticky, 50));
+window.addEventListener('resize', throttle(()=>{ 
+  // Recompute spacer when sticky and size changes
+  if(toolbar.classList.contains('sticky')){
+    toolbarSpacer.style.height = toolbar.offsetHeight + 'px';
+  }
+}, 100));
+
+/* ===== Init ===== */
+(async ()=>{
   await loadCategories();
   await loadSample();
   await loadPlants();
+  // initial compute for toolbar state
+  updateToolbarSticky();
 })();
-
-/* Stick toolbar when header scrolls out — no gap */
-document.addEventListener("scroll", () => {
-  const toolbar = document.querySelector(".toolbar");
-  const header = document.querySelector("header");
-  if (!toolbar || !header) return;
-  if (window.scrollY > header.offsetHeight) {
-    toolbar.classList.add("sticky");
-  } else {
-    toolbar.classList.remove("sticky");
-  }
-});
 </script>
 </body>
 </html>
