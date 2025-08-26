@@ -4,166 +4,599 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>🌿 Urvann | Mini Plant Store</title>
-<link rel="icon" href="storelogo.png" type="image/png">
+<link rel="icon" href="/storelogo.ico" type="image/x-icon">
+<link rel="icon" href="/storelogo.png" type="image/png">
+
+
 <style>
-/* === SAME CSS AS BEFORE (already integrated) === */
 :root{
-  --bg:#F6FAF6;--bg-2:#ECF6EE;--panel:#FFFFFF;--card:#FFFFFF;
-  --text:#1B2B22;--muted:#62756C;--accent:#2F9D69;--accent2:#31B5A3;
-  --soil:#8B5E3C;--water:#3FA7D6;--danger:#E05252;--warn:#E6A534;
-  --border:rgba(27,43,34,0.10);--shadow:rgba(15, 38, 24, .08);
-  --ring:rgba(47,157,105,.28);--header-h:56px;
+  /* Brand palette — Light, Plant-inspired */
+  --bg:#F6FAF6;              /* garden mist */
+  --bg-2:#ECF6EE;            /* soft leaf tint */
+  --panel:#FFFFFF;           /* surfaces */
+  --card:#FFFFFF;
+  --text:#1B2B22;            /* deep leaf text */
+  --muted:#62756C;           /* sage gray */
+  --accent:#2F9D69;          /* leaf green */
+  --accent2:#31B5A3;         /* water teal */
+  --soil:#8B5E3C;            /* soil brown */
+  --water:#3FA7D6;           /* water blue */
+  --danger:#E05252;
+  --warn:#E6A534;
+  --border:rgba(27,43,34,0.10);
+  --shadow:rgba(15, 38, 24, .08);
+  --ring:rgba(47,157,105,.28);
+  --header-h: 56px;          /* slightly taller for airy light theme */
 }
-*{box-sizing:border-box} body{margin:0;font-family:Inter,system-ui;
-background:radial-gradient(1200px 700px at -10% -20%,var(--bg-2) 0%,transparent 40%),
-radial-gradient(900px 500px at 110% -10%,#E6F4F7 0%,transparent 50%),
-linear-gradient(180deg,var(--bg) 0%,#FDFEFC 100%);color:var(--text);
-display:flex;flex-direction:column;min-height:100vh}
-.container{width:min(1200px,95%);margin:0 auto;padding:16px}
-/* header, toolbar, card, modal, footer styles SAME as your code */
-header{top:0;z-index:30;height:var(--header-h);backdrop-filter:blur(10px);
-background:rgba(255,255,255,.8);border-bottom:1px solid var(--border)}
-.header-container{display:flex;align-items:center;justify-content:space-between;height:100%}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:44px;height:44px;border-radius:12px;
-background:conic-gradient(from210deg,#B9E6C8,#8ED7B1,#B9E6C8);
-display:grid;place-items:center;font-weight:800}
-.brand-title{font-size:18px;font-weight:800}.brand-sub{font-size:12px;color:var(--muted)}
-.toolbar{display:grid;grid-template-columns:1fr 160px 160px 160px;gap:10px;padding:12px}
-.input,.select,.btn{padding:10px 12px;border-radius:10px;border:1px solid var(--border)}
-.btn{background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;border:none;cursor:pointer}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:16px;margin-top:12px}
-.card{background:#fff;border:1px solid var(--border);border-radius:18px;padding:14px;
-box-shadow:0 10px 26px var(--shadow);display:flex;flex-direction:column;gap:10px}
+
+/* Reset & base */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+  color:var(--text);
+  background:
+    radial-gradient(1200px 700px at -10% -20%, var(--bg-2) 0%, transparent 40%),
+    radial-gradient(900px 500px at 110% -10%, #E6F4F7 0%, transparent 50%),
+    linear-gradient(180deg, var(--bg) 0%, #FDFEFC 100%);
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+
+.container{width:min(1200px,95%);margin:0 auto;padding:16px;}
+
+/* Brand */
+.brand{display:flex;align-items:center;gap:12px}
+.logo{
+  width:44px;height:44px;border-radius:12px;
+  background:
+    conic-gradient(from 210deg, #B9E6C8, #8ED7B1, #B9E6C8),
+    radial-gradient(40px 40px at 50% 110%, #E2D3C6 0%, transparent 60%); /* subtle soil at base */
+  box-shadow: 0 6px 18px var(--shadow), 0 0 0 1px var(--border) inset;
+  display:grid; place-items:center; font-weight:800; color:#0d3b2a;
+}
+.brand-text{display:flex;flex-direction:column}
+.brand-title{font-size:18px;font-weight:800;letter-spacing:.2px}
+.brand-sub{font-size:12px;color:var(--muted)}
+
+/* State pill */
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(47,157,105,.08);
+  border:1px solid rgba(47,157,105,.20);
+  padding:6px 10px;border-radius:999px;
+  font-size:12px;color:#1b3a2b;
+}
+
+/* ===== Header (compact & glassy) ===== */
+header {
+  top: 0;
+  z-index: 30;
+  height: var(--header-h, 56px);
+  backdrop-filter: blur(10px);
+  background: rgba(255,255,255,.8);
+  border-bottom:1px solid var(--border);
+  position: relative; /* natural flow; toolbar handles stickiness */
+}
+
+.header-container.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 12px;
+  gap: 8px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* ===== Toolbar (hugs header, no gap) ===== */
+.toolbar {
+  display: grid;
+  grid-template-columns: 1fr 160px 160px 160px;
+  gap: 10px;
+  padding: 12px 16px;
+  margin-top: 0;
+  position: sticky;
+  top: var(--header-h, 56px);
+
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,0.86);
+  border: 1px solid var(--border);
+  border-radius: 0 0 14px 14px;
+  box-shadow: 0 8px 24px var(--shadow);
+  transition: box-shadow .2s ease, transform .2s ease, border-color .2s ease;
+  z-index: 25;
+}
+.toolbar:hover{ border-color: rgba(47,157,105,.22) }
+
+/* Toolbar when docked to very top */
+.toolbar.sticky {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(95%, 1200px);
+  margin-top: 0;
+  border-radius: 0 0 14px 14px;
+  z-index: 29;
+}
+
+/* Inputs & buttons */
+.input, .select, .btn{
+  padding:10px 12px;border-radius:10px;border:1px solid var(--border);
+  background: var(--panel); color:var(--text); outline:none;
+  transition: box-shadow .2s, transform .06s, border-color .2s, background .2s;
+}
+.input::placeholder{ color: #8aa398 }
+.input:focus, .select:focus{box-shadow:0 0 0 4px var(--ring); border-color:rgba(47,157,105,.45)}
+.select{ appearance:none; background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%); background-position: calc(100% - 18px) calc(1em + 2px), calc(100% - 13px) calc(1em + 2px); background-size: 5px 5px, 5px 5px; background-repeat: no-repeat; padding-right:28px; }
+
+.btn{
+  background: linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff; border:none; font-weight:750; cursor:pointer;
+  box-shadow: 0 6px 16px rgba(47,157,105,.2);
+}
+.btn:hover{ filter: brightness(1.04) }
+.btn:active{ transform: translateY(1px) }
+
+/* ===== Grid & Cards ===== */
+main{flex:1}
+.grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px,1fr));
+  gap:16px; margin-top:12px;
+}
+.card{
+  background: var(--card);
+  border:1px solid var(--border);
+  border-radius:18px; padding:14px;
+  box-shadow: 0 10px 26px var(--shadow);
+  display:flex; flex-direction:column; gap:10px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .2s;
+  position:relative; overflow:hidden; isolation:isolate;
+}
+.card:before{
+  /* faint leaf shape */
+  content:"";
+  position:absolute; inset:auto -30% -40% auto; width:180px; height:180px;
+  background: radial-gradient(80px 140px at 50% 50%, rgba(47,157,105,.08) 0%, transparent 70%);
+  transform: rotate(-28deg);
+  pointer-events:none; z-index:0;
+}
+.card:hover{ transform: translateY(-6px); box-shadow: 0 14px 34px rgba(47,157,105,.18) }
+.card .img{
+  width:100%; aspect-ratio: 16/11; border-radius:12px;
+  background:
+    linear-gradient(180deg, #E7F5EB 0%, #DDEFE9 100%),
+    linear-gradient(180deg, #EAF6FB 0%, #E4F3FA 100%);
+  display:grid; place-items:center; color:#5f7b6c; font-size:12px; font-weight:700; letter-spacing:.4px;
+  border:1px dashed rgba(27,43,34,.12);
+}
 .card h3{margin:0;font-size:16px;font-weight:800}
-.price{font-weight:850;color:var(--soil)}
-.badges{display:flex;flex-wrap:wrap;gap:6px}.tag{font-size:12px;padding:4px 8px;background:#eef}
-.card-footer{display:flex;justify-content:space-between}
-.btn-sm{padding:6px 8px;font-size:12px;border-radius:8px;border:1px solid var(--border);cursor:pointer}
-.del{background:linear-gradient(135deg,#f1736e,#e14b4b);color:#fff;border:none}
-.modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.4);display:none;
-align-items:center;justify-content:center}
-.modal{background:#fff;padding:16px;border-radius:12px;width:min(500px,95%)}
-.error{color:red;font-size:12px;display:none}
-footer{position:fixed;bottom:0;width:100%;background:rgba(255,255,255,.9);border-top:1px solid var(--border)}
-.footer-container{display:flex;justify-content:space-between;padding:10px 16px}
+.price{font-weight:850; letter-spacing:.2px; color:var(--soil)}
+.badges{display:flex; flex-wrap:wrap; gap:6px}
+.tag{
+  display:inline-flex; align-items:center; gap:6px;
+  padding:4px 8px; border-radius:999px; font-size:12px; font-weight:600;
+  background:rgba(47,157,105,.08); border:1px solid rgba(47,157,105,.20); color:#1f4a35;
+}
+.stock{font-size:12px}
+.stock.in{color:#1f7a4f}
+.stock.out{color:var(--danger)}
+.card-footer{display:flex; align-items:center; justify-content:space-between; margin-top:auto; gap:8px}
+.btn-sm{
+  padding:7px 10px; border-radius:8px; border:1px solid var(--border); font-size:12px; cursor:pointer; background:#fff;
+  transition: transform .12s, filter .2s, border-color .2s;
+}
+.btn-sm:hover{transform:translateY(-1px); border-color: rgba(47,157,105,.35)}
+.edit{ background: linear-gradient(135deg,#4fc08a,#35a8b6); color:#fff; border:none }
+.del{
+  background: linear-gradient(135deg,#f1736e,#e14b4b); color:#fff; border:none;
+  width:34px; height:34px; display:grid; place-items:center; border-radius:10px;
+}
+
+/* ===== Skeletons ===== */
+.skel{
+  animation: pulse 1.2s ease-in-out infinite;
+  background: linear-gradient(90deg, rgba(27,43,34,.06), rgba(27,43,34,.12), rgba(27,43,34,.06));
+  background-size: 200% 100%;
+}
+@keyframes pulse{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.card.skeleton .img{border:none}
+.card.skeleton h3, .card.skeleton .price, .card.skeleton .badges, .card.skeleton .card-footer{height:14px}
+.card.skeleton .img{height:auto; aspect-ratio:16/11; border-radius:12px}
+.card.skeleton .line{height:12px;border-radius:6px}
+
+/* ===== Footer ===== */
+footer{
+  position:fixed; bottom:0; left:0; width:100%;
+  backdrop-filter: blur(8px);
+  background: rgba(255,255,255,.86);
+  border-top:1px solid var(--border);
+  z-index:20;
+}
+.footer-container{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 16px; width:min(1200px,95%); margin:0 auto;
+}
+.footer-brand{font-weight:900;color:var(--accent)}
+.footer-count{
+  background:rgba(47,157,105,.08); padding:6px 12px; border-radius:999px; font-size:13px;
+  border:1px solid rgba(47,157,105,.20); color:#1f4a35;
+}
+.container{padding-bottom:86px} /* avoid overlap with footer */
+
+/* ===== Modal ===== */
+.modal-backdrop{
+  position:fixed; inset:0; background:rgba(27,43,34,.35);
+  display:none; align-items:center; justify-content:center; padding:16px; z-index:40;
+}
+.modal{
+  width:min(560px,100%); background: var(--panel);
+  border:1px solid var(--border); border-radius:16px; padding:16px;
+  box-shadow: 0 20px 40px rgba(27,43,34,.18);
+}
+.modal h2{margin:0 0 8px 0}
+.modal .grid{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+.modal label{font-size:12px; color:var(--muted)}
+.modal .row-2{grid-column:1 / -1}
+.error{color:var(--danger); font-size:12px; margin-top:6px; display:none}
+
+/* ===== Toasts ===== */
+.toast{
+  position: fixed; right:16px; bottom: 92px; /* above footer */
+  background:#163a2a; border:1px solid rgba(255,255,255,.12);
+  color:#F4FFF7; padding:10px 12px; border-radius:10px;
+  box-shadow: 0 8px 24px rgba(27,43,34,.28);
+  display:none; z-index:45; font-size:13px;
+}
+
+/* ===== Empty state ===== */
+.empty{
+  text-align:center; padding:40px 0; color:var(--muted);
+  border:1px dashed var(--border); border-radius:16px;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 920px){
+  .toolbar{grid-template-columns:1fr 1fr 1fr; }
+  #sortWrap{display:none}
+}
+@media (max-width: 720px){
+  .toolbar{grid-template-columns:1fr 1fr}
+}
 </style>
 </head>
 <body>
 <header>
   <div class="header-container container">
-    <div class="brand"><div class="logo">🌿</div>
-      <div><div class="brand-title">Urvann Mini Plant Store</div>
-      <div class="brand-sub">Bringing greenery closer to you</div></div>
+    <div class="brand">
+      <div class="logo">🌿</div>
+      <div class="brand-text">
+        <div class="brand-title">Urvann Mini Plant Store</div>
+        <div class="brand-sub">Bringing greenery closer to you</div>
+      </div>
     </div>
-    <span class="pill">Local Mode</span>
+    <span class="pill">Mongo: <strong id="mongoState">checking…</strong></span>
   </div>
 </header>
+
 <main class="container">
-  <div class="toolbar">
-    <input id="search" class="input" placeholder="Search plants..."/>
-    <select id="category" class="select"><option value="">All categories</option></select>
-    <select id="availability" class="select">
-      <option value="">All stock states</option><option value="true">In stock</option>
-      <option value="false">Out of stock</option></select>
-    <button id="addBtn" class="btn">➕ Add Plant</button>
+  <div class="toolbar" role="region" aria-label="Filters and actions">
+    <input id="search" class="input" placeholder="Search plants or categories…" aria-label="Search"/>
+    <select id="category" class="select" aria-label="Category">
+      <option value="">All categories</option>
+    </select>
+    <select id="availability" class="select" aria-label="Stock">
+      <option value="">All stock states</option>
+      <option value="true">In stock</option>
+      <option value="false">Out of stock</option>
+    </select>
+    <div id="sortWrap" style="display:contents">
+      <select id="sort" class="select" aria-label="Sort">
+        <option value="">Sort: Default</option>
+        <option value="priceAsc">Price ↑</option>
+        <option value="priceDesc">Price ↓</option>
+        <option value="nameAsc">Name A–Z</option>
+        <option value="nameDesc">Name Z–A</option>
+      </select>
+    </div>
+    <button id="addBtn" class="btn" aria-haspopup="dialog">➕ Add Plant</button>
   </div>
-  <div id="grid" class="grid"></div>
-  <div id="empty" style="display:none;text-align:center;padding:20px">No plants found</div>
+
+  <div id="status" class="brand-sub"></div>
+  <div id="grid" class="grid" aria-live="polite"></div>
+  <div id="empty" class="empty" style="display:none;">No plants found. Try clearing filters.</div>
 </main>
+
 <footer>
   <div class="footer-container">
     <span class="footer-brand">Urvann</span>
-    <span id="count">0</span>
+    <span id="count" class="footer-count">0</span>
   </div>
 </footer>
-<!-- Modal -->
-<div class="modal-backdrop" id="modalBackdrop">
-  <div class="modal">
-    <h2 id="modalTitle">Add Plant</h2>
-    <label>Name<input id="m_name" class="input"/></label><div id="e_name" class="error"></div>
-    <label>Price<input id="m_price" type="number" class="input"/></label><div id="e_price" class="error"></div>
-    <label>Categories<input id="m_cats" class="input" placeholder="comma separated"/></label>
-    <label><input type="checkbox" id="m_stock" checked/> In Stock</label>
-    <button id="saveBtn" class="btn">Save</button>
-    <button id="cancelBtn" class="btn-sm">Cancel</button>
+
+<!-- Toast -->
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<!-- Modal Add/Edit -->
+<div class="modal-backdrop" id="modalBackdrop" aria-hidden="true">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <h2 id="modalTitle">Add a new plant</h2>
+    <div class="grid">
+      <div>
+        <label for="m_name">Name</label>
+        <input id="m_name" class="input" placeholder="e.g., Money Plant"/>
+        <div id="e_name" class="error"></div>
+      </div>
+      <div>
+        <label for="m_price">Price (₹)</label>
+        <input id="m_price" class="input" type="number" min="0" placeholder="e.g., 199"/>
+        <div id="e_price" class="error"></div>
+      </div>
+      <div class="row-2">
+        <label for="m_cats">Categories (comma-separated)</label>
+        <input id="m_cats" class="input" placeholder="Indoor, Home Decor"/>
+        <div id="e_cats" class="error"></div>
+      </div>
+      <div class="row-2" style="display:flex;align-items:center;gap:10px">
+        <input type="checkbox" id="m_stock" checked aria-label="In stock"/>
+        <label for="m_stock">In stock</label>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; justify-content:flex-end; margin-top:14px;">
+      <button id="m_cancel" class="btn-sm" style="background:#fff">Cancel</button>
+      <button id="m_submit" class="btn">Add Plant</button>
+    </div>
   </div>
 </div>
+
 <script>
-/* ==== DATA (seedPlants) ==== */
-let plants = [
- { name:"Money Plant", price:199, categories:["Indoor"], inStock:true },
- { name:"Snake Plant", price:299, categories:["Indoor","Low Maintenance"], inStock:true },
- { name:"Rose", price:149, categories:["Outdoor","Flowering"], inStock:true },
- { name:"Tulsi", price:69, categories:["Outdoor","Medicinal"], inStock:true }
-];
-let editingIndex = null;
+/* ===== API ===== */
+const api = { health:'/api/health', plants:'/api/plants', categories:'/api/categories', sample:'/api/plants/sample' };
+const el = sel => document.querySelector(sel);
+const els = sel => Array.from(document.querySelectorAll(sel));
+const toastEl = el('#toast');
 
-/* ==== DOM ==== */
-const grid=document.getElementById("grid"),empty=document.getElementById("empty"),
-catSel=document.getElementById("category"),availSel=document.getElementById("availability"),
-searchInp=document.getElementById("search"),count=document.getElementById("count"),
-modal=document.getElementById("modalBackdrop"),m_name=document.getElementById("m_name"),
-m_price=document.getElementById("m_price"),m_cats=document.getElementById("m_cats"),
-m_stock=document.getElementById("m_stock"),saveBtn=document.getElementById("saveBtn"),
-cancelBtn=document.getElementById("cancelBtn"),e_name=document.getElementById("e_name"),
-e_price=document.getElementById("e_price");
+/* ===== Toast helper ===== */
+function toast(msg){
+  toastEl.textContent = msg;
+  toastEl.style.display = 'block';
+  clearTimeout(toastEl._t);
+  toastEl._t = setTimeout(()=> toastEl.style.display = 'none', 2200);
+}
 
-/* ==== RENDER ==== */
-function render(){
-  grid.innerHTML=""; let list=filterPlants();
-  if(list.length==0){empty.style.display="block"} else {empty.style.display="none"}
-  list.forEach((p,i)=>{
-    const card=document.createElement("div");card.className="card";
-    card.innerHTML=`<h3>${p.name}</h3>
-      <div class="price">₹${p.price}</div>
-      <div class="badges">${p.categories.map(c=>`<span class="tag">${c}</span>`).join("")}</div>
-      <div class="stock ${p.inStock?"in":"out"}">${p.inStock?"In Stock":"Out of Stock"}</div>
-      <div class="card-footer">
-        <button class="btn-sm edit">Edit</button>
-        <button class="btn-sm del">❌</button></div>`;
-    card.querySelector(".edit").onclick=()=>openModal(i);
-    card.querySelector(".del").onclick=()=>{plants.splice(i,1);render()};
-    grid.appendChild(card);
+/* ===== Modal logic ===== */
+let editId = null;
+const modalBackdrop = el('#modalBackdrop');
+const m_title = el('#modalTitle');
+const m_name = el('#m_name'), m_price = el('#m_price'), m_cats = el('#m_cats'), m_stock = el('#m_stock');
+const e_name = el('#e_name'), e_price = el('#e_price'), e_cats = el('#e_cats');
+const m_submit = el('#m_submit'), m_cancel = el('#m_cancel');
+
+function openModal(edit=null){
+  modalBackdrop.style.display='flex';
+  modalBackdrop.setAttribute('aria-hidden','false');
+  if(edit){
+    editId = edit._id || edit.id;
+    m_title.textContent = 'Edit Plant';
+    m_name.value = edit.name || '';
+    m_price.value = edit.price ?? '';
+    m_cats.value = (edit.categories || []).join(', ');
+    m_stock.checked = !!edit.inStock;
+    m_submit.textContent = 'Update';
+  }else{
+    editId = null;
+    m_title.textContent = 'Add a new plant';
+    m_name.value=''; m_price.value=''; m_cats.value=''; m_stock.checked=true;
+    m_submit.textContent = 'Add Plant';
+  }
+  e_name.style.display = e_price.style.display = e_cats.style.display = 'none';
+  setTimeout(()=> m_name.focus(), 0);
+}
+function closeModal(){
+  modalBackdrop.style.display='none';
+  modalBackdrop.setAttribute('aria-hidden','true');
+}
+m_cancel.addEventListener('click', closeModal);
+modalBackdrop.addEventListener('click', (e)=>{ if(e.target === modalBackdrop) closeModal(); });
+
+/* ===== Fetch helper ===== */
+async function fetchJSON(url,opt){ const res = await fetch(url,opt); if(!res.ok){ throw new Error('HTTP '+res.status) } return res.json(); }
+
+/* ===== State ===== */
+let plants = [];
+let categories = [];
+let loading = false;
+
+/* ===== Loaders ===== */
+function showSkeletons(n=8){
+  const container = el('#grid'); container.innerHTML = '';
+  for(let i=0;i<n;i++){
+    const c = document.createElement('div'); c.className='card skeleton';
+    c.innerHTML = '\
+      <div class="img skel"></div>\
+      <div class="line skel"></div>\
+      <div class="line skel" style="width:60%"></div>\
+      <div class="line skel" style="width:40%"></div>\
+      <div class="line skel" style="width:80%"></div>\
+    ';
+    container.appendChild(c);
+  }
+}
+
+/* ===== Categories ===== */
+async function loadCategories(){
+  try{
+    const data = await fetchJSON(api.categories);
+    categories = data.categories || [];
+    const sel = el('#category');
+    sel.innerHTML = '<option value="">All categories</option>';
+    categories.forEach(c=>{
+      const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o);
+    });
+  }catch(e){ console.error(e); }
+}
+
+/* ===== List / Filters / Sort ===== */
+function queryParams(){
+  const search = el('#search').value.trim();
+  const cat = el('#category').value;
+  const stock = el('#availability').value;
+  return { search, cat, stock };
+}
+const debounce = (fn, t=220)=>{ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn(...a), t); } };
+
+async function loadPlants(){
+  try{
+    loading = true;
+    showSkeletons();
+    const {search, cat, stock} = queryParams();
+    const url = api.plants + '?search=' + encodeURIComponent(search) + '&category=' + encodeURIComponent(cat) + '&inStock=' + encodeURIComponent(stock);
+    const data = await fetchJSON(url);
+    plants = data.plants || [];
+    applyClientSort();
+    renderPlants();
+    renderCount();
+  }catch(e){
+    console.error(e);
+    el('#grid').innerHTML = '<div class="empty">Failed to load plants. Please retry.</div>';
+  }finally{
+    loading = false;
+  }
+}
+
+function applyClientSort(){
+  const sortVal = el('#sort') ? el('#sort').value : '';
+  if(sortVal === 'priceAsc') plants.sort((a,b)=>(a.price||0)-(b.price||0));
+  else if(sortVal === 'priceDesc') plants.sort((a,b)=>(b.price||0)-(a.price||0));
+  else if(sortVal === 'nameAsc') plants.sort((a,b)=>(a.name||'').localeCompare(b.name||''));
+  else if(sortVal === 'nameDesc') plants.sort((a,b)=>(b.name||'').localeCompare(a.name||''));
+}
+
+function renderPlants(){
+  const container = el('#grid'); container.innerHTML = '';
+  if(plants.length===0){ el('#empty').style.display='block'; return; } else { el('#empty').style.display='none'; }
+
+  plants.forEach(p=>{
+    const c = document.createElement('div'); c.className = 'card';
+    const cats = (p.categories || []);
+    const imgLabel = (cats[0] || 'Plant').toUpperCase();
+
+    c.innerHTML = '\
+      <div class="img" aria-hidden="true">\
+        <div style="opacity:.9;font-weight:800;letter-spacing:.4px">'+ imgLabel +'</div>\
+      </div>\
+      <h3>'+ (p.name || 'Untitled Plant') +'</h3>\
+      <div class="price">₹'+ (p.price ?? 0) +'</div>\
+      <div class="badges">'+ cats.map(cat=>'<span class="tag">🌱 '+cat+'</span>').join('') +'</div>\
+      <div class="stock '+ (p.inStock?'in':'out') +'">'+ (p.inStock?'In stock':'Out of stock') +'</div>\
+      <div class="card-footer">\
+        <button class="btn-sm edit">Edit</button>\
+        <button class="btn-sm del" title="Delete">🗑️</button>\
+      </div>\
+    ';
+
+    c.querySelector('.edit').addEventListener('click', ()=> openModal(p));
+    c.querySelector('.del').addEventListener('click', async ()=>{
+      if(confirm('Delete plant?')){
+        try{
+          await fetchJSON(api.plants + '/' + (p._id || p.id), { method:'DELETE' });
+          toast('Deleted');
+          loadPlants();
+        }catch(e){ console.error(e); toast('Delete failed'); }
+      }
+    });
+    container.appendChild(c);
   });
-  count.textContent=plants.length;
-  populateCategories();
 }
-function populateCategories(){
-  let cats=[...new Set(plants.flatMap(p=>p.categories))].sort();
-  catSel.innerHTML='<option value="">All categories</option>'+cats.map(c=>`<option>${c}</option>`).join("");
+function renderCount(){ el('#count').textContent = plants.length + ' plant(s)'; }
+
+/* ===== Events ===== */
+el('#addBtn').addEventListener('click', ()=> openModal());
+el('#category').addEventListener('change', loadPlants);
+el('#availability').addEventListener('change', loadPlants);
+if(el('#sort')) el('#sort').addEventListener('change', ()=>{ applyClientSort(); renderPlants(); });
+
+/* Debounced search */
+el('#search').addEventListener('input', debounce(loadPlants, 250));
+
+/* Submit (Add / Update) */
+m_submit.addEventListener('click', async ()=>{
+  const name = m_name.value.trim();
+  const price = m_price.value.trim();
+  const cats = m_cats.value.trim();
+  const stock = m_stock.checked;
+
+  let valid = true;
+  e_name.style.display = e_price.style.display = e_cats.style.display = 'none';
+
+  if(!name || name.length < 2){ e_name.textContent='Name must be at least 2 characters'; e_name.style.display='block'; valid=false; }
+  if(!price || isNaN(price) || Number(price) < 0){ e_price.textContent='Enter a valid price'; e_price.style.display='block'; valid=false; }
+  if(!cats){ e_cats.textContent='At least 1 category'; e_cats.style.display='block'; valid=false; }
+  if(!valid) return;
+
+  const payload = {
+    name,
+    price: Number(price),
+    categories: cats.split(',').map(s=>s.trim()).filter(Boolean),
+    inStock: stock
+  };
+
+  try{
+    if(editId){
+      await fetchJSON(api.plants + '/' + editId, {
+        method:'PUT', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      editId = null;
+      toast('Updated');
+    }else{
+      await fetchJSON(api.plants, {
+        method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)
+      });
+      toast('Added');
+    }
+    closeModal();
+    loadPlants();
+    loadSample(); // keep your original hook
+  }catch(e){ console.error(e); toast('Save failed'); }
+});
+
+/* ===== Sample seeding (safe no-op if not present) ===== */
+async function loadSample(){
+  try{
+    // Try to trigger seeding if backend supports it; ignore errors.
+    await fetch(api.sample, { method:'POST' }).catch(()=>{});
+  }catch(e){ /* ignore */ }
 }
-function filterPlants(){
-  let s=searchInp.value.toLowerCase(),cat=catSel.value,av=availSel.value;
-  return plants.filter(p=>
-    (!s||p.name.toLowerCase().includes(s)||p.categories.some(c=>c.toLowerCase().includes(s))) &&
-    (!cat||p.categories.includes(cat)) &&
-    (!av||(av==="true"?p.inStock:!p.inStock))
-  );
-}
-/* ==== MODAL ==== */
-function openModal(idx=null){
-  editingIndex=idx;
-  modal.style.display="flex";
-  if(idx!=null){let p=plants[idx];m_name.value=p.name;m_price.value=p.price;
-    m_cats.value=p.categories.join(", ");m_stock.checked=p.inStock}
-  else{m_name.value="";m_price.value="";m_cats.value="";m_stock.checked=true}
-}
-function closeModal(){modal.style.display="none"}
-saveBtn.onclick=()=>{
-  e_name.style.display="none"; e_price.style.display="none";
-  if(m_name.value.trim().length<2){e_name.style.display="block";return}
-  if(!m_price.value||m_price.value<0){e_price.style.display="block";return}
-  let obj={name:m_name.value.trim(),price:+m_price.value,
-           categories:m_cats.value.split(",").map(s=>s.trim()).filter(Boolean),
-           inStock:m_stock.checked};
-  if(editingIndex!=null) plants[editingIndex]=obj; else plants.unshift(obj);
-  closeModal();render();
-};
-cancelBtn.onclick=closeModal;
-/* ==== INIT ==== */
-document.getElementById("addBtn").onclick=()=>openModal();
-[searchInp,catSel,availSel].forEach(el=>el.oninput=render);
-render();
+
+/* ===== Init ===== */
+(async ()=>{
+  try{
+    const health = await fetchJSON(api.health);
+    el('#mongoState').textContent = health.mongo ? 'Connected' : 'Not Connected (Memory)';
+  }catch(e){ el('#mongoState').textContent = 'Unknown'; }
+
+  await loadCategories();
+  await loadSample();
+  await loadPlants();
+})();
+
+/* Stick toolbar when header scrolls out — no gap */
+document.addEventListener("scroll", () => {
+  const toolbar = document.querySelector(".toolbar");
+  const header = document.querySelector("header");
+  if (!toolbar || !header) return;
+  if (window.scrollY > header.offsetHeight) {
+    toolbar.classList.add("sticky");
+  } else {
+    toolbar.classList.remove("sticky");
+  }
+});
 </script>
 </body>
 </html>
