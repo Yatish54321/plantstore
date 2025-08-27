@@ -1,6 +1,6 @@
 # Urvann Mini Plant Store 🌱
 
-A full-stack mini plant store application built with **Node.js + Express + MongoDB (Mongoose)** for backend and **React.js** for frontend.  
+A full-stack mini plant store application built with **Node.js + Express + MongoDB (Mongoose)** for backend and **React.js + HTML** for frontend.  
 
 This project allows users to browse plants, filter by category, search, and manage plant inventory. It also includes auto-seeding of plants if the database is empty and works with in-memory storage as a fallback.
 
@@ -26,8 +26,9 @@ project-root/
 ├── client/             # React frontend
 │   ├── public/
 │   └── src/
-├── server.js           # Express backend
+├── server.js         # Express backend
 ├── package.json
+├── index.html
 ├── package-lock.json
 └── .gitignore
 ```
@@ -36,7 +37,7 @@ project-root/
 
 ## **Tech Stack**
 
-- **Frontend:** React.js, CSS  
+- **Frontend:** React.js, HTML, CSS , JS 
 - **Backend:** Node.js, Express.js, MongoDB via Mongoose  
 - **Database:** MongoDB Atlas (cloud)  
 - **Deployment:** Vercel (Frontend) + Render (Backend)  
@@ -48,8 +49,8 @@ project-root/
 1. Clone the repository:
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/Yatish54321/plantstore.git
+cd plantstore
 ```
 
 2. Install backend dependencies:
@@ -70,9 +71,9 @@ cd ..
 4. Create a `.env` file in the root folder:
 
 ```env
-MONGODB_URI=your_mongodb_connection_string
-MONGODB_DB=your_database_name   # optional if included in URI
-PORT=4000                       # optional, defaults to 4000
+MONGODB_URI=mongodb+srv://yatish54321:GvP8XASDKDbaCByk@plantcluster.bdrf49m.mongodb.net/?retryWrites=true&w=majority&appName=PlantCluster
+MONGODB_DB=miniPlantStore
+PORT=4000
 ```
 
 5. Start the server:
@@ -123,4 +124,4 @@ MIT License © 2025
 
 ## **Author**
 
-Yatish Verma
+Yatish Kumar Verma
