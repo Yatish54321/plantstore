@@ -9,7 +9,6 @@
 
 <style>
 :root{
-  /* Light, Plant-inspired */
   --bg:#F6FAF6;
   --bg-2:#ECF6EE;
   --panel:#FFFFFF;
@@ -27,7 +26,7 @@
   --radius:18px;
 }
 
-/* Reset & base */
+
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
@@ -90,7 +89,7 @@ header {
   margin: 0 auto;
 }
 
-/* ===== Toolbar wrapper + spacer (prevents layout jump/overlap) ===== */
+/* ===== Toolbar wrapper ===== */
 .toolbar-wrap{position:relative}
 #toolbarSpacer{height:0px; transition:height .2s ease}
 
@@ -131,7 +130,7 @@ header {
   padding:10px 12px;border-radius:10px;border:1px solid var(--border);
   background: var(--panel); color:var(--text); outline:none;
   transition: box-shadow .2s, transform .06s, border-color .2s, background .2s;
-  min-width:0; /* prevents overflow in grid */
+  min-width:0; 
 }
 .input::placeholder{ color: #8aa398 }
 .input:focus, .select:focus{box-shadow:0 0 0 4px var(--ring); border-color:rgba(47,157,105,.45)}
@@ -300,7 +299,7 @@ footer{
 </header>
 
 <main class="container">
-  <!-- Spacer avoids layout jump when toolbar becomes fixed -->
+
   <div id="toolbarSpacer"></div>
 
   <div class="toolbar-wrap">
@@ -317,8 +316,8 @@ footer{
       <div id="sortWrap" style="display:contents">
         <select id="sort" class="select" aria-label="Sort">
           <option value="">Sort: Default</option>
-          <option value="priceAsc">Price ↑</option>
-          <option value="priceDesc">Price ↓</option>
+          <option value="priceAsc">Price ↓</option>
+          <option value="priceDesc">Price ↑</option>
           <option value="nameAsc">Name A–Z</option>
           <option value="nameDesc">Name Z–A</option>
         </select>
@@ -592,11 +591,11 @@ m_submit.addEventListener('click', async ()=>{
     }
     closeModal();
     loadPlants();
-    loadSample(); // no-op if not supported
+    loadSample(); 
   }catch(e){ console.error(e); toast('Save failed'); }
 });
 
-/* ===== Sample seeding (safe no-op if not present) ===== */
+/* ===== Sample seeding  ===== */
 async function loadSample(){
   try{ await fetch(api.sample, { method:'POST' }).catch(()=>{}); }catch(e){}
 }
@@ -609,7 +608,7 @@ async function loadSample(){
   }catch(e){ el('#mongoState').textContent = 'Unknown'; }
 })();
 
-/* ===== Smart toolbar (hug header, no overlap, no layout jump) ===== */
+/* ===== Smart toolbar  ===== */
 const toolbar = el('#toolbar');
 const toolbarSpacer = el('#toolbarSpacer');
 const header = document.querySelector('header');
@@ -622,7 +621,7 @@ function updateToolbarSticky(){
   if(shouldStick){
     if(!toolbar.classList.contains('sticky')){
       toolbar.classList.add('sticky');
-      toolbarSpacer.style.height = tbHeight + 'px'; // reserve space to prevent jump/overlap
+      toolbarSpacer.style.height = tbHeight + 'px'; 
     }
   }else{
     if(toolbar.classList.contains('sticky')){
@@ -634,7 +633,7 @@ function updateToolbarSticky(){
 
 document.addEventListener("scroll", throttle(updateToolbarSticky, 50));
 window.addEventListener('resize', throttle(()=>{ 
-  // Recompute spacer when sticky and size changes
+
   if(toolbar.classList.contains('sticky')){
     toolbarSpacer.style.height = toolbar.offsetHeight + 'px';
   }
@@ -645,7 +644,7 @@ window.addEventListener('resize', throttle(()=>{
   await loadCategories();
   await loadSample();
   await loadPlants();
-  // initial compute for toolbar state
+
   updateToolbarSticky();
 })();
 </script>
